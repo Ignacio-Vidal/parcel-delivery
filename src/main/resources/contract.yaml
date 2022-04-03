@@ -1,0 +1,285 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Parcel Delivery App
+  contact:
+    name: Ignacio Vidal
+    email: v030816@student.staffs.ac.uk
+
+servers:
+  - url: http://localhost:8443
+    description: Development server
+
+tags:
+  - name: Parcel
+    description: Parcel delivery app
+  - name: User
+    description: User management app
+
+paths:
+  /user/login:
+    post:
+      description: Login to the application
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLoginRequest'
+      responses:
+        '200':
+          description: Successful login
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '400':
+          description: Invalid username or password
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /user/register:
+    post:
+      description: Register a new user
+      operationId: register
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreateRequest'
+      responses:
+        '201':
+          description: Successful registration
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+
+  /parcels:
+    get:
+      summary: Get all parcels
+      operationId: listParcels
+      tags:
+        - parcel
+      parameters:
+        - name: status
+          in: query
+          description: Status of the parcel
+          required: false
+          schema:
+            type: string
+            enum:
+              - REGISTERED
+              - READY_FOR_ALLOCATION
+              - BOOKED_FOR_COLLECTION
+              - DELIVERY_ASSIGNED
+              - OUT_FOR_DELIVERY
+              - DELIVERED
+              - REJECTED_BY_CUSTOMER
+      responses:
+        '200':
+          description: A list of parcel
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ParcelRequestResponse"
+
+    post:
+      summary: Register a parcel
+      operationId: registerParcel
+      tags:
+        - parcel
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ParcelCreateRequest'
+      responses:
+        '201':
+          description: Successful registration
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParcelRequestResponse'
+
+  /parcels/{parcelId}:
+    get:
+      summary: Info for a specific parcel
+      operationId: showParcelById
+      tags:
+        - parcel
+      parameters:
+        - name: parcelId
+          in: path
+          required: true
+          description: The id of the parcel to retrieve
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Parcel information
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ParcelRequestResponse"
+    put:
+      summary: Update the status of a parcel
+      operationId: updateParcel
+      tags:
+        - parcel
+      parameters:
+        - name: parcelId
+          in: path
+          required: true
+          description: The id of the parcel to update
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ParcelRequestResponse'
+      responses:
+        '204':
+          description: Succesful update
+        '400':
+          description: Invalid status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Parcel update conflicts with another update
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    delete:
+      summary: Delete a parcel
+      operationId: deleteParcel
+      tags:
+        - parcel
+      parameters:
+        - name: parcelId
+          in: path
+          required: true
+          description: The id of the parcel to delete
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Successful deletion
+        '404':
+          description: Parcel not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        uuid:
+          type: string
+        name:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        role:
+          type: string
+          enum:
+            - CUSTOMER
+            - DRIVER
+      required: [ name, lastName, email, role ]
+
+    UserCreateRequest:
+      allOf:
+        - $ref: '#/components/schemas/User'
+
+    UserLoginRequest:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+
+    UserResponse:
+      allOf:
+        - $ref: '#/components/schemas/User'
+      required: [ uuid ]
+
+    ParcelStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - REGISTERED
+            - READY_FOR_ALLOCATION
+            - BOOKED_FOR_COLLECTION
+            - DELIVERY_ASSIGNED
+            - OUT_FOR_DELIVERY
+            - DELIVERED
+            - REJECTED_BY_CUSTOMER
+
+    Parcel:
+      allOf:
+        - $ref: '#/components/schemas/ParcelStatus'
+      type: object
+      properties:
+        uuid:
+          type: string
+        pickupAddress:
+          type: string
+        destinationAddress:
+          type: string
+        issuer:
+          type: string
+          enum:
+            - CUSTOMER
+            - DRIVER
+
+    ParcelRequestResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ParcelStatus'
+        - $ref: '#/components/schemas/Parcel'
+      required:
+        - status
+        - uuid
+        - pickupAddress
+        - destinationAddress
+        - issuer
+
+    ParcelCreateRequest:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Parcel'
+        - $ref: '#/components/schemas/User'
+      required:
+        - pickupAddress
+        - destinationAddress
+        - issuer
+
+
+
+    ErrorResponse:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
