@@ -34,8 +34,9 @@ public class ParcelServiceImpl implements ParcelService {
     }
 
     @Override
-    public int registerParcel(Parcel parcel) {
-        return parcelRepository.save(parcel);
+    public String registerParcel(Parcel parcel) {
+        parcelRepository.save(parcel);
+        return parcel.getUuid();
     }
 
     @Override

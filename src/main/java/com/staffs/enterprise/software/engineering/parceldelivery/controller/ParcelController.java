@@ -13,11 +13,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.Authentication;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,19 +48,17 @@ public class ParcelController {
     }
 
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public int createParcel(@RequestBody CreateParcelDTO dto, Authentication auth) {
-        Object principal = auth.getPrincipal();
-        AppUser user = userService.findUserByEmail(principal.toString());
+    public String createParcel(@RequestBody CreateParcelDTO dto, HttpServletRequest request) {
+        AppUser user = (AppUser) request.getAttribute("user");
         Parcel parcel = parcelMapper.toParcel(dto, user);
-        parcelService.registerParcel(parcel);
-        return 1;
+        String parcelUuid = parcelService.registerParcel(parcel);
+        log.info("Parcel created: {}", parcelUuid);
+        return parcelUuid;
     }
 
     @RequestMapping(method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ParcelDTO updateParcel(@PathVariable("id") String id, @RequestBody ParcelDTO dto, Authentication auth) {
-        Object principal = auth.getPrincipal();
-        AppUser user = userService.findUserByEmail(principal.toString());
-        Parcel parcel = parcelMapper.toParcel(dto, user);
+    public ParcelDTO updateParcel(@PathVariable("id") String id, @RequestBody ParcelDTO dto, HttpServletRequest request) {
+        Parcel parcel = parcelMapper.toParcel(dto, (AppUser) request.getAttribute("user"));
         Parcel updatedParcel = parcelService.updateParcel(parcel);
         return parcelMapper.toDTO(updatedParcel);
     }

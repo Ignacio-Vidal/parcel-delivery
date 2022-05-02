@@ -11,7 +11,7 @@ public interface ParcelService {
 
     public List<Parcel> getParcelsByStatus(String status);
 
-    public int registerParcel(Parcel parcel);
+    public String registerParcel(Parcel parcel);
 
     public Optional<Parcel> getParcelById(String uuid);
 

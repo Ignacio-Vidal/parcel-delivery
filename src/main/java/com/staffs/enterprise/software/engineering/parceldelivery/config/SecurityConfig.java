@@ -2,6 +2,8 @@ package com.staffs.enterprise.software.engineering.parceldelivery.config;
 
 import com.staffs.enterprise.software.engineering.parceldelivery.filter.AuthZFilter;
 import com.staffs.enterprise.software.engineering.parceldelivery.filter.JWTFilter;
+import com.staffs.enterprise.software.engineering.parceldelivery.filter.UserFilter;
+import com.staffs.enterprise.software.engineering.parceldelivery.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -21,10 +23,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final UserService userService;
 
-    public SecurityConfig(UserDetailsService userDetailsService, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public SecurityConfig(UserDetailsService userDetailsService, BCryptPasswordEncoder bCryptPasswordEncoder, UserService userService) {
         this.userDetailsService = userDetailsService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.userService = userService;
     }
 
     @Override
@@ -42,6 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/parcels").hasAnyAuthority("DRIVER", "CUSTOMER");
         http.addFilter(new JWTFilter(authenticationManagerBean()));
         http.addFilterBefore(new AuthZFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterAfter(new UserFilter(userService), AuthZFilter.class);
     }
 
     @Bean
