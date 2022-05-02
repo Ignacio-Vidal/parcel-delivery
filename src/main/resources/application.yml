@@ -1,0 +1,14 @@
+app:
+  datasource:
+    main:
+      driver-class-name: org.postgresql.Driver
+      jdbc-url: jdbc:postgresql://localhost:5432/postgres
+      username: staffs
+      password: student
+      pool-size: 30
+
+server:
+  error:
+    include-binding-errors: always
+    include-message: always
+

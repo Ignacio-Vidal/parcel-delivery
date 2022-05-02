@@ -189,8 +189,6 @@ components:
           type: string
         name:
           type: string
-        lastName:
-          type: string
         email:
           type: string
         role:
@@ -198,11 +196,14 @@ components:
           enum:
             - CUSTOMER
             - DRIVER
-      required: [ name, lastName, email, role ]
+      required: [ name, email, role ]
 
     UserCreateRequest:
       allOf:
         - $ref: '#/components/schemas/User'
+      properties:
+        password:
+          type: string
 
     UserLoginRequest:
       type: object
@@ -242,11 +243,6 @@ components:
           type: string
         destinationAddress:
           type: string
-        issuer:
-          type: string
-          enum:
-            - CUSTOMER
-            - DRIVER
 
     ParcelRequestResponse:
       type: object
@@ -258,7 +254,6 @@ components:
         - uuid
         - pickupAddress
         - destinationAddress
-        - issuer
 
     ParcelCreateRequest:
       type: object
@@ -268,9 +263,6 @@ components:
       required:
         - pickupAddress
         - destinationAddress
-        - issuer
-
-
 
     ErrorResponse:
       type: object
