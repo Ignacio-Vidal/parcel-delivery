@@ -52,7 +52,7 @@ public class ParcelController {
         AppUser user = (AppUser) request.getAttribute("user");
         Parcel parcel = parcelMapper.toParcel(dto, user);
         String parcelUuid = parcelService.registerParcel(parcel);
-        log.info("Parcel created: {}", parcelUuid);
+        log.info("Parcel created with uuid={}", parcelUuid);
         return parcelUuid;
     }
 

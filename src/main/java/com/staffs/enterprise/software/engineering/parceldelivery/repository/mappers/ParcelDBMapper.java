@@ -17,7 +17,6 @@ public class ParcelDBMapper implements RowMapper<Parcel> {
 
     @Override
     public Parcel mapRow(ResultSet rs, int rowNum) throws SQLException {
-        log.info(rs.getMetaData().toString());
         AppUser user = AppUser.create(
                 (long) rs.getInt("uid"),
                 rs.getString("uuuid"),
