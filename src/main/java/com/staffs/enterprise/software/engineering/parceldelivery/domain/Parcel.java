@@ -2,6 +2,7 @@ package com.staffs.enterprise.software.engineering.parceldelivery.domain;
 
 import org.springframework.data.annotation.Id;
 
+import java.util.Set;
 import java.util.UUID;
 
 public class Parcel {
@@ -21,7 +22,6 @@ public class Parcel {
         this.status = status;
         this.user = user;
     }
-
 
     public String getUuid() {
         return uuid;
@@ -43,6 +43,50 @@ public class Parcel {
         return user;
     }
 
+    public void readyForAllocation() {
+        Set<ParcelStatus> statuses = Set.of(ParcelStatus.REGISTERED, ParcelStatus.REJECTED_BY_CUSTOMER);
+        if (!statuses.contains(this.status)) {
+            throw new IllegalStateException("Parcel is not REGISTERED or REJECTED_BY_CUSTOMER");
+        }
+        status = ParcelStatus.READY_FOR_ALLOCATION;
+    }
+
+    public void assignDelivery(AppUser user) {
+        if (!status.equals(ParcelStatus.READY_FOR_ALLOCATION) || this.user != null) {
+            throw new IllegalStateException("Parcel is not ready for allocation");
+        }
+        this.user = user;
+        this.status = ParcelStatus.DELIVERY_ASSIGNED;
+    }
+
+    public void outForDelivery() {
+        if (!status.equals(ParcelStatus.DELIVERY_ASSIGNED)) {
+            throw new IllegalStateException("Parcel is not assigned for delivery");
+        }
+        status = ParcelStatus.OUT_FOR_DELIVERY;
+    }
+
+    public void delivered() {
+        if (!status.equals(ParcelStatus.OUT_FOR_DELIVERY)) {
+            throw new IllegalStateException("Parcel is not out for delivery");
+        }
+        status = ParcelStatus.DELIVERED;
+    }
+
+    public void returned() {
+        if (!status.equals(ParcelStatus.OUT_FOR_DELIVERY)) {
+            throw new IllegalStateException("Parcel is not out for delivery");
+        }
+        status = ParcelStatus.READY_FOR_ALLOCATION;
+        user = null;
+    }
+
+    public void rejected() {
+        if (!status.equals(ParcelStatus.OUT_FOR_DELIVERY)) {
+            throw new IllegalStateException("Parcel is not out for delivery");
+        }
+        status = ParcelStatus.REJECTED_BY_CUSTOMER;
+    }
 
     public static class Builder {
         private Long id;

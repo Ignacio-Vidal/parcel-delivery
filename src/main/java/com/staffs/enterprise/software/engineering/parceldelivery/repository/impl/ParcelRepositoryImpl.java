@@ -30,7 +30,7 @@ public class ParcelRepositoryImpl implements ParcelRepository {
     }
 
     @Override
-    public Optional<Parcel> findById(String uuid) {
+    public Optional<Parcel> findByUuid(String uuid) {
         String query = "SELECT p.id as pid, p.uuid as puuid,  p.pickup_address as ppick, p.destination_address as pdest, p.status as pstatus, u.id as uid, u.uuid as uuuid, u.name as uname, u.email as uemail, u.password as upassword, u.created as ucreated, u.role as urole " +
                 "FROM parcels p " +
                 "LEFT JOIN parcels_users pu ON p.uuid = pu.parcel_uuid " +
@@ -52,6 +52,11 @@ public class ParcelRepositoryImpl implements ParcelRepository {
 
     @Override
     public void updateParcel(Parcel parcel) {
+        String parcelQuery = "UPDATE parcels SET status=? WHERE uuid=?";
+        jdbcTemplate.update(parcelQuery, parcel.getStatus().toString(), parcel.getUuid());
+
+        String joinQuery = "UPDATE parcels_users SET user_uuid=? WHERE parcel_uuid=?";
+        jdbcTemplate.update(joinQuery, parcel.getUser().getUuid(), parcel.getUuid());
     }
 
     @Override

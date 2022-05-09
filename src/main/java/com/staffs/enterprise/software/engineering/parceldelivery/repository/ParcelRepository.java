@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface ParcelRepository {
     List<Parcel> findAllByStatus(String status);
 
-    Optional<Parcel> findById(String id);
+    Optional<Parcel> findByUuid(String id);
 
     int save(Parcel parcel);
 
