@@ -8,7 +8,6 @@ public class BaseParcelDTO {
     private String pickupAddress;
     @NotBlank
     private String destinationAddress;
-
     @NotBlank
     private String recipientName;
 
@@ -20,7 +19,6 @@ public class BaseParcelDTO {
 
     public BaseParcelDTO() {
     }
-
 
     public String getPickupAddress() {
         return pickupAddress;

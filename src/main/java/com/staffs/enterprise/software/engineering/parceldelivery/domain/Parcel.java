@@ -11,12 +11,44 @@ public class Parcel {
     private String uuid;
     private String pickupAddress;
     private String destinationAddress;
-    private ParcelStatus status;
-    private AppUser owner;
-    private AppUser driver;
     private String recipientName;
+    private ParcelStatus status;
+    private String owner;
+    private String driver;
 
-    private Parcel(Long id, String uuid, String pickupAddress, String destinationAddress, ParcelStatus status, AppUser owner, String recipientName, AppUser driver) {
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
+    public void setPickupAddress(String pickupAddress) {
+        this.pickupAddress = pickupAddress;
+    }
+
+    public void setDestinationAddress(String destinationAddress) {
+        this.destinationAddress = destinationAddress;
+    }
+
+    public void setRecipientName(String recipientName) {
+        this.recipientName = recipientName;
+    }
+
+    public void setStatus(ParcelStatus status) {
+        this.status = status;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
+    public void setDriver(String driver) {
+        this.driver = driver;
+    }
+
+    private Parcel(Long id, String uuid, String pickupAddress, String destinationAddress, ParcelStatus status, String owner, String recipientName, String driver) {
         this.id = id;
         this.uuid = uuid;
         this.pickupAddress = pickupAddress;
@@ -42,7 +74,7 @@ public class Parcel {
         return status;
     }
 
-    public AppUser getOwner() {
+    public String getOwner() {
         return owner;
     }
 
@@ -50,7 +82,7 @@ public class Parcel {
         return recipientName;
     }
 
-    public AppUser getDriver(){
+    public String getDriver(){
         return driver;
     }
 
@@ -66,7 +98,7 @@ public class Parcel {
         if (!status.equals(ParcelStatus.READY_FOR_ALLOCATION) || this.owner != null) {
             throw new IllegalStateException("Parcel is not ready for allocation");
         }
-        this.owner = user;
+        this.owner = user.getUuid();
         this.status = ParcelStatus.DELIVERY_ASSIGNED;
     }
 
@@ -105,8 +137,8 @@ public class Parcel {
         private String pickupAddress;
         private String destinationAddress;
         private ParcelStatus status;
-        private AppUser owner;
-        private AppUser driver;
+        private String owner;
+        private String driver;
         private String recipientName;
 
         public Builder id(Long id) {
@@ -134,7 +166,7 @@ public class Parcel {
             return this;
         }
 
-        public Builder withOwner(AppUser owner) {
+        public Builder withOwner(String owner) {
             this.owner = owner;
             return this;
         }
@@ -144,7 +176,7 @@ public class Parcel {
             return this;
         }
 
-        public Builder withDriver(AppUser driver) {
+        public Builder withDriver(String driver) {
             this.driver = driver;
             return this;
         }

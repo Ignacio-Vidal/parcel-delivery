@@ -23,18 +23,18 @@ CREATE TABLE parcel_owner
 (
     id          BIGSERIAL NOT NULL,
     parcel_uuid TEXT      NOT NULL,
-    user_uuid   TEXT      NOT NULL,
+    owner  TEXT      NOT NULL,
     FOREIGN KEY (parcel_uuid) REFERENCES parcels (uuid),
-    FOREIGN KEY (user_uuid) REFERENCES users (uuid)
+    FOREIGN KEY (owner) REFERENCES users (uuid)
 );
 
 CREATE TABLE parcel_driver
 (
     id          BIGSERIAL NOT NULL,
     parcel_uuid TEXT      NOT NULL,
-    user_uuid   TEXT      NOT NULL,
+    driver   TEXT      NOT NULL,
     FOREIGN KEY (parcel_uuid) REFERENCES parcels (uuid),
-    FOREIGN KEY (user_uuid) REFERENCES users (uuid)
+    FOREIGN KEY (driver) REFERENCES users (uuid)
 );
 
 

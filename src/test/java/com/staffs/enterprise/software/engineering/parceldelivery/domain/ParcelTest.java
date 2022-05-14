@@ -101,7 +101,7 @@ public class ParcelTest {
                 .withDestinationAddress("destinationAddress")
                 .withPickupAddress("pickupAddress")
                 .withStatus(status)
-                .withOwner(user)
+                .withOwner(user.getUuid())
                 .build();
     }
 }

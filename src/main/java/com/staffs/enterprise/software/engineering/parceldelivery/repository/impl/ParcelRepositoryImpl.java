@@ -19,22 +19,36 @@ public class ParcelRepositoryImpl implements ParcelRepository {
 
     @Override
     public List<Parcel> findAllByStatus(String status) {
-        String query = "SELECT p.id as pid, p.uuid as puuid,  p.pickup_address as ppick, p.destination_address as pdest, p.status as pstatus, p.recipient_name as precipient, u.id as uid, u.uuid as uuuid, u.name as uname, u.email as uemail, u.password as upassword, u.created as ucreated, u.role as urole " +
-                "FROM parcels p " +
-                "LEFT JOIN parcel_owner pu ON p.uuid = pu.parcel_uuid " +
-                "LEFT JOIN  users u on u.uuid = pu.user_uuid " +
-                "WHERE p.status=? ";
+        String query = "SELECT p.id                  as id,\n" +
+                "       p.uuid                as uuid,\n" +
+                "       p.pickup_address      as pick,\n" +
+                "       p.destination_address as dest,\n" +
+                "       p.status              as status,\n" +
+                "       p.recipient_name      as recipient,\n" +
+                "       pd.driver             as driver,\n" +
+                "       po.owner              as owner\n" +
+                "FROM parcels p\n" +
+                "         LEFT JOIN parcel_owner po ON p.uuid = po.parcel_uuid\n" +
+                "         LEFT JOIN parcel_driver pd on p.uuid = pd.parcel_uuid\n" +
+                "WHERE p.status = ?;";
         List<Parcel> parcels = jdbcTemplate.query(query, new ParcelDBMapper(), status);
         return parcels;
     }
 
     @Override
     public Optional<Parcel> findByUuid(String uuid) {
-        String query = "SELECT p.id as pid, p.uuid as puuid,  p.pickup_address as ppick, p.destination_address as pdest, p.status as pstatus, p.recipient_name as precipient, u.id as uid, u.uuid as uuuid, u.name as uname, u.email as uemail, u.password as upassword, u.created as ucreated, u.role as urole " +
-                "FROM parcels p " +
-                "LEFT JOIN parcel_owner pu ON p.uuid = pu.parcel_uuid " +
-                "LEFT JOIN  users u on u.uuid = pu.user_uuid " +
-                "WHERE p.uuid=? ";
+        String query = "SELECT p.id                  as id,\n" +
+                "       p.uuid                as uuid,\n" +
+                "       p.pickup_address      as pick,\n" +
+                "       p.destination_address as dest,\n" +
+                "       p.status              as status,\n" +
+                "       p.recipient_name      as recipient,\n" +
+                "       pd.driver             as driver,\n" +
+                "       po.owner              as owner\n" +
+                "FROM parcels p\n" +
+                "         LEFT JOIN parcel_owner po ON p.uuid = po.parcel_uuid\n" +
+                "         LEFT JOIN parcel_driver pd on p.uuid = pd.parcel_uuid\n" +
+                "WHERE p.uuid = ?;";
         Optional<Parcel> parcel = jdbcTemplate.query(query, new ParcelDBMapper(), uuid).stream().findFirst();
         return parcel;
     }
@@ -44,8 +58,8 @@ public class ParcelRepositoryImpl implements ParcelRepository {
         String parcelQuery = "INSERT INTO parcels(uuid, pickup_address, destination_address, status, recipient_name) VALUES (?, ?, ?, ?, ?)";
         int parcelId = jdbcTemplate.update(parcelQuery, parcel.getUuid(), parcel.getPickupAddress(), parcel.getDestinationAddress(), parcel.getStatus().toString(), parcel.getRecipientName());
 
-        String parcelOwnerQuery = "INSERT INTO parcel_owner(parcel_uuid, user_uuid) VALUES (?, ?)";
-        int joinId = jdbcTemplate.update(parcelOwnerQuery, parcel.getUuid(), parcel.getOwner().getUuid());
+        String parcelOwnerQuery = "INSERT INTO parcel_owner(parcel_uuid, owner) VALUES (?, ?)";
+        int joinId = jdbcTemplate.update(parcelOwnerQuery, parcel.getUuid(), parcel.getOwner());
         return parcelId;
     }
 
@@ -54,12 +68,12 @@ public class ParcelRepositoryImpl implements ParcelRepository {
         String parcelQuery = "UPDATE parcels SET status=? WHERE uuid=?";
         jdbcTemplate.update(parcelQuery, parcel.getStatus().toString(), parcel.getUuid());
 
-        String parcelOwnerQuery = "UPDATE parcel_owner SET user_uuid=? WHERE parcel_uuid=?";
-        jdbcTemplate.update(parcelOwnerQuery, parcel.getOwner().getUuid(), parcel.getUuid());
+        String parcelOwnerQuery = "UPDATE parcel_owner SET owner=? WHERE parcel_uuid=?";
+        jdbcTemplate.update(parcelOwnerQuery, parcel.getOwner(), parcel.getUuid());
 
         if (parcel.getDriver() != null) {
-            String parcelDriverQuery = "UPDATE parcel_driver SET user_uuid=? WHERE parcel_uuid=?";
-            jdbcTemplate.update(parcelDriverQuery, parcel.getDriver().getUuid(), parcel.getUuid());
+            String parcelDriverQuery = "UPDATE parcel_driver SET driver=? WHERE parcel_uuid=?";
+            jdbcTemplate.update(parcelDriverQuery, parcel.getDriver(), parcel.getUuid());
         }
     }
 

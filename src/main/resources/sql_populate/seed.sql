@@ -17,11 +17,21 @@ VALUES ('d6b0025c-b0b9-4f70-95bd-30b9cb462fd1', 'Calle 5', 'Calle 6', 'REGISTERE
 INSERT INTO parcels(uuid, pickup_address, destination_address, status, recipient_name)
 VALUES ('61b55ce3-b749-4a1f-b18d-fcaa7ae9bd73', 'Calle 7', 'Calle 8', 'REGISTERED', 'Inazio');
 
-INSERT INTO parcel_owner(parcel_uuid, user_uuid)
+INSERT INTO parcel_owner(parcel_uuid, owner)
 VALUES ('f6833235-28ae-4e53-8dc3-db5ccad38dd6', '9d719427-8119-4a94-9a74-5f5e4a73cdac');
-INSERT INTO parcel_owner(parcel_uuid, user_uuid)
+INSERT INTO parcel_owner(parcel_uuid, owner)
 VALUES ('07e09b43-0b05-464d-b831-4c48fcc8e874', '666c63ef-ece1-4abf-aea4-40fe3430920c');
-INSERT INTO parcel_owner(parcel_uuid, user_uuid)
+INSERT INTO parcel_owner(parcel_uuid, owner)
 VALUES ('d6b0025c-b0b9-4f70-95bd-30b9cb462fd1', '666c63ef-ece1-4abf-aea4-40fe3430920c');
-INSERT INTO parcel_owner(parcel_uuid, user_uuid)
+INSERT INTO parcel_owner(parcel_uuid, owner)
+VALUES ('61b55ce3-b749-4a1f-b18d-fcaa7ae9bd73', '9d719427-8119-4a94-9a74-5f5e4a73cdac');
+
+
+INSERT INTO parcel_driver(parcel_uuid, driver)
+VALUES ('f6833235-28ae-4e53-8dc3-db5ccad38dd6', '9d719427-8119-4a94-9a74-5f5e4a73cdac');
+INSERT INTO parcel_driver(parcel_uuid, driver)
+VALUES ('07e09b43-0b05-464d-b831-4c48fcc8e874', '666c63ef-ece1-4abf-aea4-40fe3430920c');
+INSERT INTO parcel_driver(parcel_uuid, driver)
+VALUES ('d6b0025c-b0b9-4f70-95bd-30b9cb462fd1', '666c63ef-ece1-4abf-aea4-40fe3430920c');
+INSERT INTO parcel_driver(parcel_uuid, driver)
 VALUES ('61b55ce3-b749-4a1f-b18d-fcaa7ae9bd73', '9d719427-8119-4a94-9a74-5f5e4a73cdac');

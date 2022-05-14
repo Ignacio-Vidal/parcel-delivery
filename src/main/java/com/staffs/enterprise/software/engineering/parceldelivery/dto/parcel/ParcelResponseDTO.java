@@ -5,15 +5,13 @@ import java.util.Objects;
 
 public class ParcelResponseDTO extends BaseParcelDTO {
     private String uuid;
-    private String owner;
-    private String recipientName;
-    @NotBlank
     private String status;
+    private String owner;
+    private String driver;
 
-    public ParcelResponseDTO(String owner, String pickupAddress, String destinationAddress, String status, String recipientName, String uuid) {
+    public ParcelResponseDTO(String owner, String pickupAddress, String destinationAddress, String status, String uuid) {
         super(pickupAddress, destinationAddress, status);
         this.owner = owner;
-        this.recipientName = recipientName;
         this.uuid = uuid;
     }
 
@@ -36,14 +34,6 @@ public class ParcelResponseDTO extends BaseParcelDTO {
         this.uuid = uuid;
     }
 
-    public String getRecipientName() {
-        return recipientName;
-    }
-
-    public void setRecipientName(String recipientName) {
-        this.recipientName = recipientName;
-    }
-
     public String getOwner() {
         return owner;
     }
@@ -64,8 +54,10 @@ public class ParcelResponseDTO extends BaseParcelDTO {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ParcelResponseDTO parcelResponseDTO = (ParcelResponseDTO) o;
-        return (!owner.equals(parcelResponseDTO.owner));
+        ParcelResponseDTO that = (ParcelResponseDTO) o;
+        return !owner.equals(that.owner) &&
+                !status.equals(that.status) &&
+                !uuid.equals(that.uuid);
     }
 
     @Override

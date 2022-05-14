@@ -1,12 +1,10 @@
 package com.staffs.enterprise.software.engineering.parceldelivery.service.impl;
 
-import com.staffs.enterprise.software.engineering.parceldelivery.domain.AppUser;
 import com.staffs.enterprise.software.engineering.parceldelivery.domain.Parcel;
 import com.staffs.enterprise.software.engineering.parceldelivery.domain.ParcelStatus;
 import com.staffs.enterprise.software.engineering.parceldelivery.dto.updateParcelAction.BaseUpdateParcelAction;
 import com.staffs.enterprise.software.engineering.parceldelivery.exceptions.NotFoundException;
 import com.staffs.enterprise.software.engineering.parceldelivery.repository.ParcelRepository;
-import com.staffs.enterprise.software.engineering.parceldelivery.repository.UserRepository;
 import com.staffs.enterprise.software.engineering.parceldelivery.service.ParcelService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,12 +16,10 @@ import java.util.Optional;
 @Service
 public class ParcelServiceImpl implements ParcelService {
     private final ParcelRepository parcelRepository;
-    private final UserRepository userRepository;
     private final Logger log = LoggerFactory.getLogger(ParcelServiceImpl.class);
 
-    public ParcelServiceImpl(ParcelRepository parcelRepository, UserRepository userRepository) {
+    public ParcelServiceImpl(ParcelRepository parcelRepository) {
         this.parcelRepository = parcelRepository;
-        this.userRepository = userRepository;
     }
 
     @Override
@@ -77,7 +73,7 @@ public class ParcelServiceImpl implements ParcelService {
             default:
                 throw new IllegalStateException("unknown status for action=" + action.getAction());
         }
-        parcelRepository.updateParcel(currentParcel);
+        parcelRepository.save(currentParcel);
         return currentParcel;
     }
 

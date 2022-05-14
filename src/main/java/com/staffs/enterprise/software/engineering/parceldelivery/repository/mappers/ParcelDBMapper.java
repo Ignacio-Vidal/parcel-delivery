@@ -17,21 +17,15 @@ public class ParcelDBMapper implements RowMapper<Parcel> {
 
     @Override
     public Parcel mapRow(ResultSet rs, int rowNum) throws SQLException {
-        AppUser user = AppUser.create(
-                (long) rs.getInt("uid"),
-                rs.getString("uuuid"),
-                rs.getString("uname"),
-                rs.getString("uemail"),
-                rs.getString("upassword"),
-                Roles.valueOf(rs.getString("urole"))
-        );
+
         return new Parcel.Builder()
-                .withPickupAddress(rs.getString("ppick"))
-                .withDestinationAddress(rs.getString("pdest"))
-                .withStatus(ParcelStatus.valueOf(rs.getString("pstatus")))
-                .withUuid(rs.getString("puuid"))
-                .withOwner(user)
-                .withRecipientName(rs.getString("precipient"))
+                .withPickupAddress(rs.getString("pick"))
+                .withDestinationAddress(rs.getString("dest"))
+                .withStatus(ParcelStatus.valueOf(rs.getString("status")))
+                .withUuid(rs.getString("uuid"))
+                .withOwner(rs.getString("owner"))
+                .withRecipientName(rs.getString("recipient"))
+                .withDriver(rs.getString("driver"))
                 .build();
     }
 }

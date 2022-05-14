@@ -2,12 +2,11 @@ package com.staffs.enterprise.software.engineering.parceldelivery.controller;
 
 import com.staffs.enterprise.software.engineering.parceldelivery.domain.AppUser;
 import com.staffs.enterprise.software.engineering.parceldelivery.domain.Parcel;
-import com.staffs.enterprise.software.engineering.parceldelivery.dto.parcel.BaseParcelDTO;
 import com.staffs.enterprise.software.engineering.parceldelivery.dto.parcel.RegisterParcelDTO;
 import com.staffs.enterprise.software.engineering.parceldelivery.dto.updateParcelAction.BaseUpdateParcelAction;
 import com.staffs.enterprise.software.engineering.parceldelivery.dto.parcel.ParcelResponseDTO;
 import com.staffs.enterprise.software.engineering.parceldelivery.exceptions.NotFoundException;
-import com.staffs.enterprise.software.engineering.parceldelivery.mapper.ParcelMapper;
+import com.staffs.enterprise.software.engineering.parceldelivery.dto.mapper.ParcelMapper;
 import com.staffs.enterprise.software.engineering.parceldelivery.service.ParcelService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
