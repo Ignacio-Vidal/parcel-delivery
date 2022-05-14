@@ -12,15 +12,18 @@ public class Parcel {
     private String pickupAddress;
     private String destinationAddress;
     private ParcelStatus status;
-    private AppUser user;
+    private AppUser owner;
+    private AppUser driver;
+    private String recipientName;
 
-    private Parcel(Long id, String uuid, String pickupAddress, String destinationAddress, ParcelStatus status, AppUser user) {
+    private Parcel(Long id, String uuid, String pickupAddress, String destinationAddress, ParcelStatus status, AppUser owner, String recipientName, AppUser driver) {
         this.id = id;
         this.uuid = uuid;
         this.pickupAddress = pickupAddress;
         this.destinationAddress = destinationAddress;
         this.status = status;
-        this.user = user;
+        this.owner = owner;
+        this.recipientName = recipientName;
     }
 
     public String getUuid() {
@@ -39,8 +42,16 @@ public class Parcel {
         return status;
     }
 
-    public AppUser getUser() {
-        return user;
+    public AppUser getOwner() {
+        return owner;
+    }
+
+    public String getRecipientName() {
+        return recipientName;
+    }
+
+    public AppUser getDriver(){
+        return driver;
     }
 
     public void readyForAllocation() {
@@ -52,10 +63,10 @@ public class Parcel {
     }
 
     public void assignDelivery(AppUser user) {
-        if (!status.equals(ParcelStatus.READY_FOR_ALLOCATION) || this.user != null) {
+        if (!status.equals(ParcelStatus.READY_FOR_ALLOCATION) || this.owner != null) {
             throw new IllegalStateException("Parcel is not ready for allocation");
         }
-        this.user = user;
+        this.owner = user;
         this.status = ParcelStatus.DELIVERY_ASSIGNED;
     }
 
@@ -78,7 +89,7 @@ public class Parcel {
             throw new IllegalStateException("Parcel is not out for delivery");
         }
         status = ParcelStatus.READY_FOR_ALLOCATION;
-        user = null;
+        owner = null;
     }
 
     public void rejected() {
@@ -94,7 +105,9 @@ public class Parcel {
         private String pickupAddress;
         private String destinationAddress;
         private ParcelStatus status;
-        private AppUser user;
+        private AppUser owner;
+        private AppUser driver;
+        private String recipientName;
 
         public Builder id(Long id) {
             this.id = id;
@@ -121,8 +134,18 @@ public class Parcel {
             return this;
         }
 
-        public Builder withUser(AppUser user) {
-            this.user = user;
+        public Builder withOwner(AppUser owner) {
+            this.owner = owner;
+            return this;
+        }
+
+        public Builder withRecipientName(String recipientName) {
+            this.recipientName = recipientName;
+            return this;
+        }
+
+        public Builder withDriver(AppUser driver) {
+            this.driver = driver;
             return this;
         }
 
@@ -130,7 +153,7 @@ public class Parcel {
             if (uuid == null) {
                 this.uuid = UUID.randomUUID().toString();
             }
-            return new Parcel(id, uuid, pickupAddress, destinationAddress, status, user);
+            return new Parcel(id, uuid, pickupAddress, destinationAddress, status, owner, recipientName, driver);
         }
     }
 }

@@ -15,16 +15,27 @@ CREATE TABLE parcels
     uuid                TEXT      NOT NULL UNIQUE,
     pickup_address      TEXT      NOT NULL,
     destination_address TEXT      NOT NULL,
-    status              TEXT      NOT NULL
+    status              TEXT      NOT NULL,
+    recipient_name      TEXT      NOT NULL
 );
 
-CREATE TABLE parcels_users
+CREATE TABLE parcel_owner
 (
     id          BIGSERIAL NOT NULL,
-    parcel_uuid   TEXT      NOT NULL,
-    user_uuid     TEXT      NOT NULL,
-    FOREIGN KEY (parcel_uuid) REFERENCES parcels (uuid) ,
+    parcel_uuid TEXT      NOT NULL,
+    user_uuid   TEXT      NOT NULL,
+    FOREIGN KEY (parcel_uuid) REFERENCES parcels (uuid),
     FOREIGN KEY (user_uuid) REFERENCES users (uuid)
 );
+
+CREATE TABLE parcel_driver
+(
+    id          BIGSERIAL NOT NULL,
+    parcel_uuid TEXT      NOT NULL,
+    user_uuid   TEXT      NOT NULL,
+    FOREIGN KEY (parcel_uuid) REFERENCES parcels (uuid),
+    FOREIGN KEY (user_uuid) REFERENCES users (uuid)
+);
+
 
 

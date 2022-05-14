@@ -2,7 +2,7 @@ package com.staffs.enterprise.software.engineering.parceldelivery.controller;
 
 import com.staffs.enterprise.software.engineering.parceldelivery.domain.AppUser;
 import com.staffs.enterprise.software.engineering.parceldelivery.domain.Roles;
-import com.staffs.enterprise.software.engineering.parceldelivery.dto.RegisterUserDTO;
+import com.staffs.enterprise.software.engineering.parceldelivery.dto.user.RegisterUserDTO;
 import com.staffs.enterprise.software.engineering.parceldelivery.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

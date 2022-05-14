@@ -3,7 +3,7 @@ package com.staffs.enterprise.software.engineering.parceldelivery.service.impl;
 import com.staffs.enterprise.software.engineering.parceldelivery.domain.AppUser;
 import com.staffs.enterprise.software.engineering.parceldelivery.domain.Parcel;
 import com.staffs.enterprise.software.engineering.parceldelivery.domain.ParcelStatus;
-import com.staffs.enterprise.software.engineering.parceldelivery.dto.BaseUpdateParcelAction;
+import com.staffs.enterprise.software.engineering.parceldelivery.dto.updateParcelAction.BaseUpdateParcelAction;
 import com.staffs.enterprise.software.engineering.parceldelivery.exceptions.NotFoundException;
 import com.staffs.enterprise.software.engineering.parceldelivery.repository.ParcelRepository;
 import com.staffs.enterprise.software.engineering.parceldelivery.repository.UserRepository;
@@ -42,6 +42,7 @@ public class ParcelServiceImpl implements ParcelService {
 
     @Override
     public String registerParcel(Parcel parcel) {
+        log.info(parcel.toString());
         parcelRepository.save(parcel);
         log.info("Parcel with uuid={} registered", parcel.getUuid());
         return parcel.getUuid();
@@ -55,22 +56,14 @@ public class ParcelServiceImpl implements ParcelService {
             throw new NotFoundException("Parcel with uuid=" + action.getParcelUuid() + " not found");
         }
         Parcel currentParcel = maybeCurrentParcel.get();
-        switch (ParcelStatus.valueOf(action.getStatus())) {
+        switch (ParcelStatus.valueOf(action.getAction())) {
             case READY_FOR_ALLOCATION:
                 currentParcel.readyForAllocation();
                 break;
             case BOOKED_FOR_COLLECTION:
                 break;
             case DELIVERY_ASSIGNED:
-                if (action.getEmail() == null) {
-                    throw new IllegalStateException("user uuid is null and delivery cannot be assigned");
-                }
-                Optional<AppUser> maybeUser = userRepository.findByEmail(action.getEmail());
-                if (maybeUser.isEmpty()) {
-                    log.error("User with uuid={} not found", action.getEmail());
-                    throw new NotFoundException("User with uuid=" + action.getEmail() + " not found");
-                }
-                currentParcel.assignDelivery(maybeUser.get());
+
                 break;
             case OUT_FOR_DELIVERY:
                 currentParcel.outForDelivery();
@@ -82,7 +75,7 @@ public class ParcelServiceImpl implements ParcelService {
                 currentParcel.rejected();
                 break;
             default:
-                throw new IllegalStateException("unknown status for action=" + action.getStatus());
+                throw new IllegalStateException("unknown status for action=" + action.getAction());
         }
         parcelRepository.updateParcel(currentParcel);
         return currentParcel;

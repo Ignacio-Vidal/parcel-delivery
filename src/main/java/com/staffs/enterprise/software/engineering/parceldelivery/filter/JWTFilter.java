@@ -3,7 +3,7 @@ package com.staffs.enterprise.software.engineering.parceldelivery.filter;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.staffs.enterprise.software.engineering.parceldelivery.dto.RegisterUserDTO;
+import com.staffs.enterprise.software.engineering.parceldelivery.dto.user.RegisterUserDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;

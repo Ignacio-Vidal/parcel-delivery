@@ -41,7 +41,7 @@ public class ParcelTest {
         Parcel parcel = createParcel(null, ParcelStatus.READY_FOR_ALLOCATION);
         parcel.assignDelivery(user);
         assert parcel.getStatus() == ParcelStatus.DELIVERY_ASSIGNED;
-        assert parcel.getUser().equals(user);
+        assert parcel.getOwner().equals(user);
     }
 
     @Test
@@ -86,7 +86,7 @@ public class ParcelTest {
         Parcel parcel = createParcel(user, ParcelStatus.OUT_FOR_DELIVERY);
         parcel.returned();
         assert parcel.getStatus() == ParcelStatus.READY_FOR_ALLOCATION;
-        assert parcel.getUser() == null;
+        assert parcel.getOwner() == null;
     }
 
     @Test
@@ -101,7 +101,7 @@ public class ParcelTest {
                 .withDestinationAddress("destinationAddress")
                 .withPickupAddress("pickupAddress")
                 .withStatus(status)
-                .withUser(user)
+                .withOwner(user)
                 .build();
     }
 }

@@ -30,7 +30,8 @@ public class ParcelDBMapper implements RowMapper<Parcel> {
                 .withDestinationAddress(rs.getString("pdest"))
                 .withStatus(ParcelStatus.valueOf(rs.getString("pstatus")))
                 .withUuid(rs.getString("puuid"))
-                .withUser(user)
+                .withOwner(user)
+                .withRecipientName(rs.getString("precipient"))
                 .build();
     }
 }

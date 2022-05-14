@@ -1,7 +1,7 @@
 package com.staffs.enterprise.software.engineering.parceldelivery.service;
 
 import com.staffs.enterprise.software.engineering.parceldelivery.domain.Parcel;
-import com.staffs.enterprise.software.engineering.parceldelivery.dto.BaseUpdateParcelAction;
+import com.staffs.enterprise.software.engineering.parceldelivery.dto.updateParcelAction.BaseUpdateParcelAction;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

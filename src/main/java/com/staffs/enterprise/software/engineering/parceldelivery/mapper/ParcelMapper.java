@@ -3,50 +3,30 @@ package com.staffs.enterprise.software.engineering.parceldelivery.mapper;
 import com.staffs.enterprise.software.engineering.parceldelivery.domain.AppUser;
 import com.staffs.enterprise.software.engineering.parceldelivery.domain.Parcel;
 import com.staffs.enterprise.software.engineering.parceldelivery.domain.ParcelStatus;
-import com.staffs.enterprise.software.engineering.parceldelivery.dto.BaseParcelDTO;
-import com.staffs.enterprise.software.engineering.parceldelivery.dto.ParcelDTO;
-import com.staffs.enterprise.software.engineering.parceldelivery.dto.UpdateParcelDTO;
+import com.staffs.enterprise.software.engineering.parceldelivery.dto.parcel.ParcelResponseDTO;
+import com.staffs.enterprise.software.engineering.parceldelivery.dto.parcel.RegisterParcelDTO;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ParcelMapper {
-    public ParcelDTO toDTO(Parcel parcel) {
-        ParcelDTO dto = new ParcelDTO();
+    public ParcelResponseDTO toDTO(Parcel parcel) {
+        ParcelResponseDTO dto = new ParcelResponseDTO();
         dto.setDestinationAddress(parcel.getDestinationAddress());
         dto.setPickupAddress(parcel.getPickupAddress());
-        dto.setUuid(parcel.getUuid());
+        dto.setOwner(parcel.getUuid());
         dto.setStatus(parcel.getStatus().toString());
+        dto.setUuid(parcel.getUuid());
+        dto.setRecipientName(parcel.getRecipientName());
         return dto;
     }
 
-    public Parcel toParcel(ParcelDTO dto, AppUser user) {
+    public Parcel toParcel(RegisterParcelDTO dto, AppUser user) {
         Parcel.Builder builder = new Parcel.Builder();
-        builder.withUser(user)
+        builder.withOwner(user)
                 .withPickupAddress(dto.getPickupAddress())
                 .withDestinationAddress(dto.getDestinationAddress())
                 .withStatus(ParcelStatus.REGISTERED)
-                .withUuid(dto.getUuid());
+                .withRecipientName(dto.getRecipientName());
         return builder.build();
     }
-
-    public Parcel toParcel(BaseParcelDTO dto, AppUser user) {
-        Parcel.Builder builder = new Parcel.Builder();
-        builder.withUser(user)
-                .withPickupAddress(dto.getPickupAddress())
-                .withDestinationAddress(dto.getDestinationAddress())
-                .withStatus(ParcelStatus.valueOf(dto.getStatus()));
-        return builder.build();
-    }
-
-    public Parcel toParcel(UpdateParcelDTO dto, AppUser user) {
-        Parcel.Builder builder = new Parcel.Builder();
-        builder.withUser(user)
-                .withPickupAddress(dto.getPickupAddress())
-                .withDestinationAddress(dto.getDestinationAddress())
-                .withStatus(ParcelStatus.valueOf(dto.getStatus()))
-                .withUuid(dto.getParcelUuid());
-        return builder.build();
-    }
-
-
 }
