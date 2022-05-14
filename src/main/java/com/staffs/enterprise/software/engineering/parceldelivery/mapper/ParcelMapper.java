@@ -13,7 +13,7 @@ public class ParcelMapper {
         ParcelResponseDTO dto = new ParcelResponseDTO();
         dto.setDestinationAddress(parcel.getDestinationAddress());
         dto.setPickupAddress(parcel.getPickupAddress());
-        dto.setOwner(parcel.getUuid());
+        dto.setOwner(parcel.getOwner().getUuid());
         dto.setStatus(parcel.getStatus().toString());
         dto.setUuid(parcel.getUuid());
         dto.setRecipientName(parcel.getRecipientName());
