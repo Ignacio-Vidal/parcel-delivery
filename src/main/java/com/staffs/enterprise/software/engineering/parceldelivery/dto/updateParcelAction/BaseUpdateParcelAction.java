@@ -6,6 +6,15 @@ public class BaseUpdateParcelAction {
     private String action;
     private String parcelUuid;
 
+    public BaseUpdateParcelAction() {
+    }
+
+    public BaseUpdateParcelAction(String action, String parcelUuid) {
+        this.action = action;
+        this.parcelUuid = parcelUuid;
+    }
+
+
     public String getParcelUuid() {
         return parcelUuid;
     }

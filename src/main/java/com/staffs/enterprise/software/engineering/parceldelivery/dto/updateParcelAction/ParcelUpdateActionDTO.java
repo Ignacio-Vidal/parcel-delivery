@@ -4,17 +4,17 @@ import com.staffs.enterprise.software.engineering.parceldelivery.dto.parcel.Base
 
 import java.util.Objects;
 
-public class ParcelUpdateActionDTO extends BaseParcelDTO {
+public class ParcelUpdateActionDTO extends BaseUpdateParcelAction {
     private String parcelUuid;
-    private String userUuid;
+    private String driver;
 
     public ParcelUpdateActionDTO() {
     }
 
-    public ParcelUpdateActionDTO(String pickupAddress, String destinationAddress, String status, String parcelUuid, String userUuid, String targetStatus) {
-        super(pickupAddress, destinationAddress, status);
+    public ParcelUpdateActionDTO(String action, String parcelUuid, String driver) {
+        super(action, parcelUuid);
         this.parcelUuid = parcelUuid;
-        this.userUuid = userUuid;
+        this.driver = driver;
     }
 
     public String getParcelUuid() {
@@ -25,12 +25,12 @@ public class ParcelUpdateActionDTO extends BaseParcelDTO {
         this.parcelUuid = parcelUuid;
     }
 
-    public String getUserUuid() {
-        return userUuid;
+    public String getDriver() {
+        return driver;
     }
 
-    public void setUserUuid(String userUuid) {
-        this.userUuid = userUuid;
+    public void setDriver(String driver) {
+        this.driver = driver;
     }
 
     @Override
@@ -39,11 +39,11 @@ public class ParcelUpdateActionDTO extends BaseParcelDTO {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         ParcelUpdateActionDTO that = (ParcelUpdateActionDTO) o;
-        return parcelUuid.equals(that.parcelUuid) && userUuid.equals(that.userUuid);
+        return parcelUuid.equals(that.parcelUuid) && driver.equals(that.driver);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), parcelUuid, userUuid);
+        return Objects.hash(super.hashCode(), parcelUuid, driver);
     }
 }

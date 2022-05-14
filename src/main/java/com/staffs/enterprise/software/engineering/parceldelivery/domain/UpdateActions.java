@@ -2,7 +2,7 @@ package com.staffs.enterprise.software.engineering.parceldelivery.domain;
 
 public enum UpdateActions {
     DROP_PARCEL,
-    BOOK_FOR_LOCAL_COLLECTION_BY_CUSTOMER,
+    BOOKED_FOR_LOCAL_COLLECTION_BY_CUSTOMER,
     SELECTED_BY_DRIVER,
     COLLECTED_BY_DRIVER,
     DELIVERED_BY_DRIVER,

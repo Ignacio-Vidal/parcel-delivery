@@ -95,10 +95,10 @@ public class Parcel {
     }
 
     public void assignDelivery(AppUser user) {
-        if (!status.equals(ParcelStatus.READY_FOR_ALLOCATION) || this.owner != null) {
+        if (!status.equals(ParcelStatus.READY_FOR_ALLOCATION)) {
             throw new IllegalStateException("Parcel is not ready for allocation");
         }
-        this.owner = user.getUuid();
+        this.driver = user.getUuid();
         this.status = ParcelStatus.DELIVERY_ASSIGNED;
     }
 

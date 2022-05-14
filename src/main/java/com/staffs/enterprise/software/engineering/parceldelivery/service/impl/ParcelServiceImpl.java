@@ -1,8 +1,8 @@
 package com.staffs.enterprise.software.engineering.parceldelivery.service.impl;
 
 import com.staffs.enterprise.software.engineering.parceldelivery.domain.Parcel;
-import com.staffs.enterprise.software.engineering.parceldelivery.domain.ParcelStatus;
-import com.staffs.enterprise.software.engineering.parceldelivery.dto.updateParcelAction.BaseUpdateParcelAction;
+import com.staffs.enterprise.software.engineering.parceldelivery.domain.UpdateActions;
+import com.staffs.enterprise.software.engineering.parceldelivery.dto.updateParcelAction.ParcelUpdateActionDTO;
 import com.staffs.enterprise.software.engineering.parceldelivery.exceptions.NotFoundException;
 import com.staffs.enterprise.software.engineering.parceldelivery.repository.ParcelRepository;
 import com.staffs.enterprise.software.engineering.parceldelivery.service.ParcelService;
@@ -45,30 +45,34 @@ public class ParcelServiceImpl implements ParcelService {
     }
 
     @Override
-    public Parcel updateParcel(BaseUpdateParcelAction action) {
+    public Parcel updateParcel(ParcelUpdateActionDTO action) {
         Optional<Parcel> maybeCurrentParcel = parcelRepository.findByUuid(action.getParcelUuid());
         if (maybeCurrentParcel.isEmpty()) {
             log.error("Parcel with uuid={} not found", action.getParcelUuid());
             throw new NotFoundException("Parcel with uuid=" + action.getParcelUuid() + " not found");
         }
         Parcel currentParcel = maybeCurrentParcel.get();
-        switch (ParcelStatus.valueOf(action.getAction())) {
-            case READY_FOR_ALLOCATION:
+        switch (UpdateActions.valueOf(action.getAction())) {
+            case DROP_PARCEL:
                 currentParcel.readyForAllocation();
                 break;
-            case BOOKED_FOR_COLLECTION:
+            case BOOKED_FOR_LOCAL_COLLECTION_BY_CUSTOMER:
                 break;
-            case DELIVERY_ASSIGNED:
-
+            case SELECTED_BY_DRIVER:
+                currentParcel.assignDelivery();
                 break;
-            case OUT_FOR_DELIVERY:
+            case COLLECTED_BY_DRIVER:
                 currentParcel.outForDelivery();
                 break;
-            case DELIVERED:
+            case DELIVERED_BY_DRIVER:
                 currentParcel.delivered();
                 break;
-            case REJECTED_BY_CUSTOMER:
+            case RETURNED_BY_DRIVER:
                 currentParcel.rejected();
+                break;
+            case COLLECTED_LOCALLY_BY_CUSTOMER:
+                break;
+            case REJECTED_BY_CUSTOMER:
                 break;
             default:
                 throw new IllegalStateException("unknown status for action=" + action.getAction());
