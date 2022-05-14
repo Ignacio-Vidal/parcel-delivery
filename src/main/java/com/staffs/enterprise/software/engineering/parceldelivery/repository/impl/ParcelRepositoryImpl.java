@@ -30,7 +30,7 @@ public class ParcelRepositoryImpl implements ParcelRepository {
 
     @Override
     public Optional<Parcel> findByUuid(String uuid) {
-        String query = "SELECT p.id as pid, p.uuid as puuid,  p.pickup_address as ppick, p.destination_address as pdest, p.status as pstatus, u.id as uid, u.uuid as uuuid, u.name as uname, u.email as uemail, u.password as upassword, u.created as ucreated, u.role as urole " +
+        String query = "SELECT p.id as pid, p.uuid as puuid,  p.pickup_address as ppick, p.destination_address as pdest, p.status as pstatus, p.recipient_name as precipient, u.id as uid, u.uuid as uuuid, u.name as uname, u.email as uemail, u.password as upassword, u.created as ucreated, u.role as urole " +
                 "FROM parcels p " +
                 "LEFT JOIN parcel_owner pu ON p.uuid = pu.parcel_uuid " +
                 "LEFT JOIN  users u on u.uuid = pu.user_uuid " +
