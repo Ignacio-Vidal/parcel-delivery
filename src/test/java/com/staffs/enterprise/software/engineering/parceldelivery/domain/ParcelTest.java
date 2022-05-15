@@ -16,43 +16,36 @@ public class ParcelTest {
     }
 
     @Test
-    public void readyForAllocationFromRegistered() {
+    public void readyForAllocationFromRegisteredOk() {
         Parcel parcel = createParcel(user, ParcelStatus.REGISTERED);
         parcel.readyForAllocation();
         assert parcel.getStatus() == ParcelStatus.READY_FOR_ALLOCATION;
     }
 
     @Test
-    public void readyForAllocationFromRejected() {
-        Parcel parcel = createParcel(user, ParcelStatus.REJECTED_BY_CUSTOMER);
+    public void readyForAllocationFromOutForDeliveryOk() {
+        Parcel parcel = createParcel(user, ParcelStatus.OUT_FOR_DELIVERY);
         parcel.readyForAllocation();
         assert parcel.getStatus() == ParcelStatus.READY_FOR_ALLOCATION;
     }
 
     @Test
     void readyForAllocationThrowsException() {
-        Parcel parcel = createParcel(user, ParcelStatus.OUT_FOR_DELIVERY);
+        Parcel parcel = createParcel(user, ParcelStatus.DELIVERED);
         assertThrows(IllegalStateException.class, parcel::readyForAllocation);
-
     }
 
     @Test
     void assignForDeliveryOk() {
-        Parcel parcel = createParcel(null, ParcelStatus.READY_FOR_ALLOCATION);
+        Parcel parcel = createParcel(user, ParcelStatus.READY_FOR_ALLOCATION);
         parcel.assignDelivery(user);
         assert parcel.getStatus() == ParcelStatus.DELIVERY_ASSIGNED;
-        assert parcel.getOwner().equals(user);
-    }
-
-    @Test
-    void assignForDeliveryThrowsUserAlreadyAssigned() {
-        Parcel parcel = createParcel(user, ParcelStatus.READY_FOR_ALLOCATION);
-        assertThrows(IllegalStateException.class, () -> parcel.assignDelivery(user));
+        assert parcel.getDriver().equals(user.getUuid());
     }
 
     @Test
     void assignForDeliveryThrowsWrongStatus() {
-        Parcel parcel = createParcel(null, ParcelStatus.OUT_FOR_DELIVERY);
+        Parcel parcel = createParcel(user, ParcelStatus.OUT_FOR_DELIVERY);
         assertThrows(IllegalStateException.class, () -> parcel.assignDelivery(user));
     }
 
@@ -63,7 +56,7 @@ public class ParcelTest {
     }
 
     @Test
-    void outForDeliveryThrowsWrongStatus() {
+    void outForDeliveryFails() {
         Parcel parcel = createParcel(user, ParcelStatus.OUT_FOR_DELIVERY);
         assertThrows(IllegalStateException.class, parcel::outForDelivery);
     }
@@ -76,7 +69,7 @@ public class ParcelTest {
     }
 
     @Test
-    void deliveredThrowsWrongStatus() {
+    void deliveredThrows() {
         Parcel parcel = createParcel(user, ParcelStatus.DELIVERED);
         assertThrows(IllegalStateException.class, parcel::delivered);
     }
@@ -86,13 +79,39 @@ public class ParcelTest {
         Parcel parcel = createParcel(user, ParcelStatus.OUT_FOR_DELIVERY);
         parcel.returned();
         assert parcel.getStatus() == ParcelStatus.READY_FOR_ALLOCATION;
-        assert parcel.getOwner() == null;
+        assert parcel.getDriver() == null;
     }
 
     @Test
-    void returnedThrowsWrongStatus() {
+    void returnedThrows() {
         Parcel parcel = createParcel(user, ParcelStatus.READY_FOR_ALLOCATION);
         assertThrows(IllegalStateException.class, parcel::returned);
+    }
+
+    @Test
+    void rejectedOk(){
+        Parcel parcel = createParcel(user, ParcelStatus.OUT_FOR_DELIVERY);
+        parcel.rejected();
+        assert parcel.getStatus() == ParcelStatus.REJECTED_BY_CUSTOMER;
+    }
+
+    @Test
+    void rejectedThrows(){
+        Parcel parcel = createParcel(user, ParcelStatus.READY_FOR_ALLOCATION);
+        assertThrows(IllegalStateException.class, parcel::rejected);
+    }
+
+    @Test
+    void bookedForCollectionOk(){
+        Parcel parcel = createParcel(user, ParcelStatus.READY_FOR_ALLOCATION);
+        parcel.bookedForCustomerCollection();
+        assert parcel.getStatus() == ParcelStatus.BOOKED_FOR_COLLECTION;
+    }
+
+    @Test
+    void bookedForCollectionThrows(){
+        Parcel parcel = createParcel(user, ParcelStatus.OUT_FOR_DELIVERY);
+        assertThrows(IllegalStateException.class, parcel::bookedForCustomerCollection);
     }
 
     private Parcel createParcel(AppUser user, ParcelStatus status) {
@@ -102,6 +121,7 @@ public class ParcelTest {
                 .withPickupAddress("pickupAddress")
                 .withStatus(status)
                 .withOwner(user.getUuid())
+                .withDriver(null)
                 .build();
     }
 }

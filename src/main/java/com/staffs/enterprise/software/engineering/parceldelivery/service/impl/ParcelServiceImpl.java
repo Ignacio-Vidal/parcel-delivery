@@ -37,7 +37,6 @@ public class ParcelServiceImpl implements ParcelService {
 
     @Override
     public String registerParcel(Parcel parcel) {
-        log.info(parcel.toString());
         parcelRepository.save(parcel);
         log.info("Parcel with uuid={} registered", parcel.getUuid());
         return parcel.getUuid();

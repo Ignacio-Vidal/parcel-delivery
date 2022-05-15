@@ -88,7 +88,7 @@ public class Parcel {
     }
 
     public void readyForAllocation() {
-        Set<ParcelStatus> statuses = Set.of(ParcelStatus.REGISTERED, ParcelStatus.REJECTED_BY_CUSTOMER);
+        Set<ParcelStatus> statuses = Set.of(ParcelStatus.REGISTERED, ParcelStatus.OUT_FOR_DELIVERY);
         if (!statuses.contains(this.status)) {
             throw new IllegalStateException("Parcel is not REGISTERED or REJECTED_BY_CUSTOMER");
         }
