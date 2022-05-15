@@ -81,7 +81,10 @@ public class ParcelServiceImpl implements ParcelService {
     }
 
     @Override
-    public Parcel deleteParcel(String id) {
-        return null;
+    public Parcel deleteParcel(String uuid) {
+        Optional<Parcel> maybeParcel = parcelRepository.findByUuid(uuid);
+        maybeParcel.ifPresent(parcel -> parcelRepository.deleteParcel(parcel.getUuid()));
+        log.info("Parcel with uuid={} deleted", uuid);
+        return maybeParcel.orElseThrow(() -> new NotFoundException("Parcel with uuid=" + uuid + " not found"));
     }
 }

@@ -55,23 +55,110 @@ public class ParcelServiceTest {
     @Test
     void parcelDropped(){
         Parcel myParcel = create();
-        doNothing().when(parcelRepository).updateParcel(myParcel);
-        when(parcelRepository.findByUuid(myParcel.getUuid())).thenReturn(Optional.of(myParcel));
         AppUser user = createUser();
         ParcelUpdateAction action = ParcelUpdateAction.create(uuid, UpdateActions.DROP_PARCEL, user);
+
+        doNothing().when(parcelRepository).updateParcel(myParcel);
+        when(parcelRepository.findByUuid(myParcel.getUuid())).thenReturn(Optional.of(myParcel));
         Parcel updatedParcel = parcelService.updateParcel(action);
+
         assert updatedParcel.getStatus() == ParcelStatus.READY_FOR_ALLOCATION;
     }
 
     @Test
     void parcelAssignedToDriver(){
         Parcel myParcel = create();
-        doNothing().when(parcelRepository).updateParcel(myParcel);
-        when(parcelRepository.findByUuid(myParcel.getUuid())).thenReturn(Optional.of(myParcel));
         AppUser user = createUser();
         ParcelUpdateAction action = ParcelUpdateAction.create(uuid, UpdateActions.SELECTED_BY_DRIVER, user);
+
+        myParcel.readyForAllocation();
+
+        when(parcelRepository.findByUuid(myParcel.getUuid())).thenReturn(Optional.of(myParcel));
+        doNothing().when(parcelRepository).updateParcel(myParcel);
         Parcel updatedParcel = parcelService.updateParcel(action);
+
         assert updatedParcel.getStatus() == ParcelStatus.DELIVERY_ASSIGNED;
+    }
+
+    @Test
+    void collectedByDriver(){
+        Parcel myParcel = create();
+        AppUser user = createUser();
+        ParcelUpdateAction action = ParcelUpdateAction.create(uuid, UpdateActions.COLLECTED_BY_DRIVER, user);
+
+        myParcel.readyForAllocation();
+        myParcel.assignDelivery(user);
+
+        doNothing().when(parcelRepository).updateParcel(myParcel);
+        when(parcelRepository.findByUuid(myParcel.getUuid())).thenReturn(Optional.of(myParcel));
+        Parcel updatedParcel = parcelService.updateParcel(action);
+
+        assert updatedParcel.getStatus() == ParcelStatus.OUT_FOR_DELIVERY;
+    }
+
+    @Test
+    void deliveredByDriver(){
+        Parcel myParcel = create();
+        AppUser user = createUser();
+        ParcelUpdateAction action = ParcelUpdateAction.create(uuid, UpdateActions.DELIVERED_BY_DRIVER, user);
+
+        myParcel.readyForAllocation();
+        myParcel.assignDelivery(user);
+        myParcel.outForDelivery();
+
+        doNothing().when(parcelRepository).updateParcel(myParcel);
+        when(parcelRepository.findByUuid(myParcel.getUuid())).thenReturn(Optional.of(myParcel));
+        Parcel updatedParcel = parcelService.updateParcel(action);
+
+        assert updatedParcel.getStatus() == ParcelStatus.DELIVERED;
+    }
+
+    @Test
+    void rejectedByCustomer(){
+        Parcel myParcel = create();
+        AppUser user = createUser();
+        ParcelUpdateAction action = ParcelUpdateAction.create(uuid, UpdateActions.REJECTED_BY_CUSTOMER, user);
+
+        myParcel.readyForAllocation();
+        myParcel.assignDelivery(user);
+        myParcel.outForDelivery();
+
+        doNothing().when(parcelRepository).updateParcel(myParcel);
+        when(parcelRepository.findByUuid(myParcel.getUuid())).thenReturn(Optional.of(myParcel));
+        Parcel updatedParcel = parcelService.updateParcel(action);
+
+        assert updatedParcel.getStatus() == ParcelStatus.REJECTED_BY_CUSTOMER;
+    }
+
+    @Test
+    void bookedForLocalCollectionByCustomer(){
+        Parcel myParcel = create();
+        AppUser user = createUser();
+        ParcelUpdateAction action = ParcelUpdateAction.create(uuid, UpdateActions.BOOKED_FOR_LOCAL_COLLECTION_BY_CUSTOMER, user);
+
+        myParcel.readyForAllocation();
+
+        doNothing().when(parcelRepository).updateParcel(myParcel);
+        when(parcelRepository.findByUuid(myParcel.getUuid())).thenReturn(Optional.of(myParcel));
+        Parcel updatedParcel = parcelService.updateParcel(action);
+
+        assert updatedParcel.getStatus() == ParcelStatus.BOOKED_FOR_COLLECTION;
+    }
+
+    @Test
+    void collectedLocallyByCustomer(){
+        Parcel myParcel = create();
+        AppUser user = createUser();
+        ParcelUpdateAction action = ParcelUpdateAction.create(uuid, UpdateActions.COLLECTED_LOCALLY_BY_CUSTOMER, user);
+
+        myParcel.readyForAllocation();
+        myParcel.bookedForCustomerCollection();
+
+        doNothing().when(parcelRepository).updateParcel(myParcel);
+        when(parcelRepository.findByUuid(myParcel.getUuid())).thenReturn(Optional.of(myParcel));
+        Parcel updatedParcel = parcelService.updateParcel(action);
+
+        assert updatedParcel.getStatus() == ParcelStatus.DELIVERED;
     }
 
     static Parcel create() {

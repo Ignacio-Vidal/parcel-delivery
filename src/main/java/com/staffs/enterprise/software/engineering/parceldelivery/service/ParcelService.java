@@ -18,5 +18,5 @@ public interface ParcelService {
 
     public Parcel updateParcel(ParcelUpdateAction parcel);
 
-    public Parcel deleteParcel(String id);
+    public Parcel deleteParcel(String uuid);
 }

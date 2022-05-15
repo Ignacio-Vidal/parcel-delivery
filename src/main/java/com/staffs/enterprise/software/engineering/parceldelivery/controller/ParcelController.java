@@ -43,11 +43,6 @@ public class ParcelController {
         return parcelService.getParcelsByStatus(status).stream().map(parcelMapper::toDTO).collect(Collectors.toList());
     }
 
-    @GetMapping(value = "/{parcelId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ParcelResponseDTO getParcelById(@PathVariable String parcelId) {
-        return parcelService.getParcelById(parcelId).map(parcelMapper::toDTO).orElseThrow(() -> new NotFoundException("Parcel not found"));
-    }
-
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public String registerParcel(@Valid @RequestBody RegisterParcelDTO dto, HttpServletRequest request) {
         AppUser user = (AppUser) request.getAttribute("user");
@@ -55,6 +50,11 @@ public class ParcelController {
         String parcelUuid = parcelService.registerParcel(parcel);
         log.info("Parcel created with uuid={}", parcelUuid);
         return parcelUuid;
+    }
+
+    @GetMapping(value = "/{parcelId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ParcelResponseDTO getParcelById(@PathVariable String parcelId) {
+        return parcelService.getParcelById(parcelId).map(parcelMapper::toDTO).orElseThrow(() -> new NotFoundException("Parcel not found"));
     }
 
     @PostMapping(value = "/{parcelId}:updateAction", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -65,8 +65,8 @@ public class ParcelController {
         return parcelMapper.toDTO(updatedParcel);
     }
 
-    @DeleteMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ParcelResponseDTO deleteParcel(@PathVariable("id") String id) {
+    @DeleteMapping(value="/{parcelId}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ParcelResponseDTO deleteParcel(@PathVariable("parcelId") String id) {
         Parcel deletedParcel = parcelService.deleteParcel(id);
         return parcelMapper.toDTO(deletedParcel);
     }

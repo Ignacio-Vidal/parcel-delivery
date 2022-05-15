@@ -14,5 +14,5 @@ public interface ParcelRepository {
 
     void updateParcel(Parcel parcel);
 
-    void deleteParcel(int id);
+    void deleteParcel(String uuid);
 }

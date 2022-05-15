@@ -41,9 +41,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/users/login").permitAll();
-        http.authorizeRequests().antMatchers(HttpMethod.GET, "/actuator").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/users/register").permitAll();
-        http.authorizeRequests().antMatchers("/parcels").hasAnyAuthority("DRIVER", "CUSTOMER");
+
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/actuator").permitAll();
+
+        http.authorizeRequests().antMatchers(HttpMethod.GET,"/parcels").hasAnyAuthority("DRIVER");
+        http.authorizeRequests().antMatchers(HttpMethod.POST,"/parcels").hasAnyAuthority("DRIVER", "CUSTOMER");
+        http.authorizeRequests().antMatchers(HttpMethod.GET,"/parcels/{parcelId}").hasAnyAuthority("DRIVER", "CUSTOMER");
+        http.authorizeRequests().antMatchers(HttpMethod.DELETE,"/parcels/{parcelId}").hasAnyAuthority("DRIVER");
+        http.authorizeRequests().antMatchers(HttpMethod.POST,"/parcels/{parcelId}:updateAction").hasAnyAuthority("DRIVER");
+
         http.addFilter(new JWTFilter(authenticationManagerBean()));
         http.addFilterBefore(new AuthZFilter(), UsernamePasswordAuthenticationFilter.class);
         http.addFilterAfter(new UserFilter(userService), AuthZFilter.class);

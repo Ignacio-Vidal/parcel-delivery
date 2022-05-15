@@ -78,7 +78,12 @@ public class ParcelRepositoryImpl implements ParcelRepository {
     }
 
     @Override
-    public void deleteParcel(int id) {
-
+    public void deleteParcel(String uuid) {
+        String deleteOwner = "DELETE FROM parcel_owner WHERE parcel_uuid=?";
+        String deleteDriver = "DELETE FROM parcel_driver WHERE parcel_uuid=?";
+        String deleteParcel = "DELETE FROM parcels WHERE uuid=?";
+        jdbcTemplate.update(deleteOwner, uuid);
+        jdbcTemplate.update(deleteDriver, uuid);
+        jdbcTemplate.update(deleteParcel, uuid);
     }
 }
