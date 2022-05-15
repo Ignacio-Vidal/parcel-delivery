@@ -69,9 +69,10 @@ public class ParcelServiceImpl implements ParcelService {
                 currentParcel.delivered();
                 break;
             case RETURNED_BY_DRIVER:
-                currentParcel.rejected();
+                currentParcel.returned();
                 break;
             case REJECTED_BY_CUSTOMER:
+                currentParcel.rejected();
                 break;
             default:
                 throw new IllegalStateException("unknown status for action=" + action.getAction());

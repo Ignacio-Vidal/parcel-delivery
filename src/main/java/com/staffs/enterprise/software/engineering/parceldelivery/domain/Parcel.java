@@ -2,6 +2,7 @@ package com.staffs.enterprise.software.engineering.parceldelivery.domain;
 
 import org.springframework.data.annotation.Id;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -110,7 +111,7 @@ public class Parcel {
     }
 
     public void delivered() {
-        if (!status.equals(ParcelStatus.OUT_FOR_DELIVERY)) {
+        if (!List.of(ParcelStatus.OUT_FOR_DELIVERY, ParcelStatus.BOOKED_FOR_COLLECTION).contains(status)) {
             throw new IllegalStateException("Parcel is not out for delivery");
         }
         status = ParcelStatus.DELIVERED;
@@ -121,7 +122,7 @@ public class Parcel {
             throw new IllegalStateException("Parcel is not out for delivery");
         }
         status = ParcelStatus.READY_FOR_ALLOCATION;
-        owner = null;
+        driver = null;
     }
 
     public void rejected() {
