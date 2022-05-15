@@ -31,7 +31,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"Ignacio\",\r\n    \"email\": \"ignaciovidalDriver@gmail.com\",\r\n    \"role\": \"DRIVER\",\r\n    \"password\": \"sillypassword\"\r\n}",
+					"raw": "{\r\n    \"name\": \"Ignacio\",\r\n    \"email\": \"driver@gmail.com\",\r\n    \"role\": \"DRIVER\",\r\n    \"password\": \"sillypassword\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -60,7 +60,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"email\": \"ignaciovidal89@gmail.com\",\r\n    \"password\": \"sillypassword\"\r\n}",
+					"raw": "{\r\n    \"email\": \"customer@gmail.com\",\r\n    \"password\": \"sillypassword\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -132,7 +132,7 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/parcels/00f875d4-97c1-4329-9d10-01e82ed310d0",
+					"raw": "http://localhost:8080/parcels/{{parcelId}}",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -140,7 +140,7 @@
 					"port": "8080",
 					"path": [
 						"parcels",
-						"00f875d4-97c1-4329-9d10-01e82ed310d0"
+						"{{parcelId}}"
 					]
 				}
 			},
@@ -211,6 +211,35 @@
 				"body": {
 					"mode": "raw",
 					"raw": "{    \r\n    \"action\":\"BOOKED_FOR_LOCAL_COLLECTION_BY_CUSTOMER\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/parcels/{{parcelId}}:updateAction",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"parcels",
+						"{{parcelId}}:updateAction"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RecipientCollectParcelFromWarehouse",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"action\":\"COLLECTED_LOCALLY_BY_CUSTOMER\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -327,35 +356,6 @@
 				"body": {
 					"mode": "raw",
 					"raw": "{\r\n    \"action\":\"RETURNED_BY_DRIVER\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/parcels/{{parcelId}}:updateAction",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"parcels",
-						"{{parcelId}}:updateAction"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "RecipientCollectParcelFromWarehouse",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"action\":\"COLLECTED_LOCALLY_BY_CUSTOMER\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
