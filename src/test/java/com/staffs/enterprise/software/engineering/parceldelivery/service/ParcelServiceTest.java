@@ -1,7 +1,6 @@
 package com.staffs.enterprise.software.engineering.parceldelivery.service;
 
-import com.staffs.enterprise.software.engineering.parceldelivery.domain.Parcel;
-import com.staffs.enterprise.software.engineering.parceldelivery.domain.ParcelStatus;
+import com.staffs.enterprise.software.engineering.parceldelivery.domain.*;
 import com.staffs.enterprise.software.engineering.parceldelivery.repository.ParcelRepository;
 import com.staffs.enterprise.software.engineering.parceldelivery.service.impl.ParcelServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -52,6 +52,28 @@ public class ParcelServiceTest {
         assertEquals(uuid, myParcel.getUuid());
     }
 
+    @Test
+    void parcelDropped(){
+        Parcel myParcel = create();
+        doNothing().when(parcelRepository).updateParcel(myParcel);
+        when(parcelRepository.findByUuid(myParcel.getUuid())).thenReturn(Optional.of(myParcel));
+        AppUser user = createUser();
+        ParcelUpdateAction action = ParcelUpdateAction.create(uuid, UpdateActions.DROP_PARCEL, user);
+        Parcel updatedParcel = parcelService.updateParcel(action);
+        assert updatedParcel.getStatus() == ParcelStatus.READY_FOR_ALLOCATION;
+    }
+
+    @Test
+    void parcelAssignedToDriver(){
+        Parcel myParcel = create();
+        doNothing().when(parcelRepository).updateParcel(myParcel);
+        when(parcelRepository.findByUuid(myParcel.getUuid())).thenReturn(Optional.of(myParcel));
+        AppUser user = createUser();
+        ParcelUpdateAction action = ParcelUpdateAction.create(uuid, UpdateActions.SELECTED_BY_DRIVER, user);
+        Parcel updatedParcel = parcelService.updateParcel(action);
+        assert updatedParcel.getStatus() == ParcelStatus.DELIVERY_ASSIGNED;
+    }
+
     static Parcel create() {
         Parcel.Builder builder = new Parcel.Builder();
         return builder
@@ -63,6 +85,10 @@ public class ParcelServiceTest {
                 .withOwner("Ignacio")
                 .withDestinationAddress("London")
                 .build();
+    }
+
+    static AppUser createUser(){
+        return AppUser.create("John Doe", "johndoe@gmail.com", "secret_password", Roles.CUSTOMER);
     }
 }
 
