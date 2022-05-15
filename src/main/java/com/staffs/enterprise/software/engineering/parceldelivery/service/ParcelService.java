@@ -1,8 +1,7 @@
 package com.staffs.enterprise.software.engineering.parceldelivery.service;
 
 import com.staffs.enterprise.software.engineering.parceldelivery.domain.Parcel;
-import com.staffs.enterprise.software.engineering.parceldelivery.dto.updateParcelAction.BaseUpdateParcelAction;
-import com.staffs.enterprise.software.engineering.parceldelivery.dto.updateParcelAction.ParcelUpdateActionDTO;
+import com.staffs.enterprise.software.engineering.parceldelivery.domain.ParcelUpdateAction;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +16,7 @@ public interface ParcelService {
 
     public Optional<Parcel> getParcelById(String uuid);
 
-    public Parcel updateParcel(ParcelUpdateActionDTO parcel);
+    public Parcel updateParcel(ParcelUpdateAction parcel);
 
     public Parcel deleteParcel(String id);
 }

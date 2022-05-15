@@ -95,7 +95,7 @@ public class Parcel {
     }
 
     public void assignDelivery(AppUser user) {
-        if (!status.equals(ParcelStatus.READY_FOR_ALLOCATION)) {
+        if (!(status == ParcelStatus.READY_FOR_ALLOCATION)) {
             throw new IllegalStateException("Parcel is not ready for allocation");
         }
         this.driver = user.getUuid();
@@ -103,7 +103,7 @@ public class Parcel {
     }
 
     public void outForDelivery() {
-        if (!status.equals(ParcelStatus.DELIVERY_ASSIGNED)) {
+        if (!(status == ParcelStatus.DELIVERY_ASSIGNED)) {
             throw new IllegalStateException("Parcel is not assigned for delivery");
         }
         status = ParcelStatus.OUT_FOR_DELIVERY;
@@ -117,7 +117,7 @@ public class Parcel {
     }
 
     public void returned() {
-        if (!status.equals(ParcelStatus.OUT_FOR_DELIVERY)) {
+        if (!(status == ParcelStatus.OUT_FOR_DELIVERY)) {
             throw new IllegalStateException("Parcel is not out for delivery");
         }
         status = ParcelStatus.READY_FOR_ALLOCATION;
@@ -125,10 +125,17 @@ public class Parcel {
     }
 
     public void rejected() {
-        if (!status.equals(ParcelStatus.OUT_FOR_DELIVERY)) {
+        if (!(status == ParcelStatus.OUT_FOR_DELIVERY)) {
             throw new IllegalStateException("Parcel is not out for delivery");
         }
         status = ParcelStatus.REJECTED_BY_CUSTOMER;
+    }
+
+    public void bookedForCustomerCollection(){
+        if (!(status == ParcelStatus.READY_FOR_ALLOCATION)){
+            throw new IllegalStateException("Parcel is not ready for allocation");
+        }
+        status = ParcelStatus.BOOKED_FOR_COLLECTION;
     }
 
     public static class Builder {

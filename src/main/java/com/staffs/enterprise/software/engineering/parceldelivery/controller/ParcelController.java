@@ -2,10 +2,11 @@ package com.staffs.enterprise.software.engineering.parceldelivery.controller;
 
 import com.staffs.enterprise.software.engineering.parceldelivery.domain.AppUser;
 import com.staffs.enterprise.software.engineering.parceldelivery.domain.Parcel;
+import com.staffs.enterprise.software.engineering.parceldelivery.domain.ParcelUpdateAction;
+import com.staffs.enterprise.software.engineering.parceldelivery.domain.UpdateActions;
 import com.staffs.enterprise.software.engineering.parceldelivery.dto.parcel.RegisterParcelDTO;
-import com.staffs.enterprise.software.engineering.parceldelivery.dto.updateParcelAction.BaseUpdateParcelAction;
-import com.staffs.enterprise.software.engineering.parceldelivery.dto.parcel.ParcelResponseDTO;
 import com.staffs.enterprise.software.engineering.parceldelivery.dto.updateParcelAction.ParcelUpdateActionDTO;
+import com.staffs.enterprise.software.engineering.parceldelivery.dto.parcel.ParcelResponseDTO;
 import com.staffs.enterprise.software.engineering.parceldelivery.exceptions.NotFoundException;
 import com.staffs.enterprise.software.engineering.parceldelivery.dto.mapper.ParcelMapper;
 import com.staffs.enterprise.software.engineering.parceldelivery.service.ParcelService;
@@ -58,8 +59,9 @@ public class ParcelController {
 
     @PostMapping(value = "/{parcelId}:updateAction", produces = MediaType.APPLICATION_JSON_VALUE)
     public ParcelResponseDTO updateParcel(@Valid @PathVariable String parcelId, @RequestBody ParcelUpdateActionDTO dto, HttpServletRequest request) {
-        dto.setParcelUuid(parcelId);
-        Parcel updatedParcel = parcelService.updateParcel(dto);
+        AppUser user = (AppUser) request.getAttribute("user");
+        ParcelUpdateAction action = ParcelUpdateAction.create(parcelId, UpdateActions.valueOf(dto.getAction()), user);
+        Parcel updatedParcel = parcelService.updateParcel(action);
         return parcelMapper.toDTO(updatedParcel);
     }
 

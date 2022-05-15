@@ -1,49 +1,37 @@
 package com.staffs.enterprise.software.engineering.parceldelivery.dto.updateParcelAction;
 
-import com.staffs.enterprise.software.engineering.parceldelivery.dto.parcel.BaseParcelDTO;
-
+import javax.validation.constraints.NotBlank;
 import java.util.Objects;
 
-public class ParcelUpdateActionDTO extends BaseUpdateParcelAction {
-    private String parcelUuid;
-    private String driver;
+public class ParcelUpdateActionDTO {
+    @NotBlank
+    private String action;
 
     public ParcelUpdateActionDTO() {
     }
 
-    public ParcelUpdateActionDTO(String action, String parcelUuid, String driver) {
-        super(action, parcelUuid);
-        this.parcelUuid = parcelUuid;
-        this.driver = driver;
+    public ParcelUpdateActionDTO(String action) {
+        this.action = action;
     }
 
-    public String getParcelUuid() {
-        return parcelUuid;
+    public String getAction() {
+        return action;
     }
 
-    public void setParcelUuid(String parcelUuid) {
-        this.parcelUuid = parcelUuid;
-    }
-
-    public String getDriver() {
-        return driver;
-    }
-
-    public void setDriver(String driver) {
-        this.driver = driver;
+    public void setAction(String action) {
+        this.action = action;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
+        if (!(o instanceof ParcelUpdateActionDTO)) return false;
         ParcelUpdateActionDTO that = (ParcelUpdateActionDTO) o;
-        return parcelUuid.equals(that.parcelUuid) && driver.equals(that.driver);
+        return action.equals(that.action);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), parcelUuid, driver);
+        return Objects.hashCode(action);
     }
 }
