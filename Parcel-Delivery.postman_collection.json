@@ -1,0 +1,456 @@
+{
+	"info": {
+		"_postman_id": "576fb8bb-08b2-4fbe-8c24-c15792a22878",
+		"name": "Parcel-Delivery",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Health",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/actuator",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"actuator"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RegisterUser",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Ignacio\",\r\n    \"email\": \"ignaciovidalDriver@gmail.com\",\r\n    \"role\": \"DRIVER\",\r\n    \"password\": \"sillypassword\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/users/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "LoginUser",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"ignaciovidal89@gmail.com\",\r\n    \"password\": \"sillypassword\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getParcelsByStatus",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/parcels?status=REGISTERED",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"parcels"
+					],
+					"query": [
+						{
+							"key": "status",
+							"value": "REGISTERED"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getParcelById",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/parcels/{{parcelId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"parcels",
+						"{{parcelId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteParcelById",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/parcels/00f875d4-97c1-4329-9d10-01e82ed310d0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"parcels",
+						"00f875d4-97c1-4329-9d10-01e82ed310d0"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RegisterParcel",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"pickupAddress\": \"Calle 14\",\r\n    \"destinationAddress\": \"Calle 15\",\r\n    \"recipientName\": \"Nash Smith\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/parcels",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"parcels"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DropParcelInWarehouse",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"action\": \"DROP_PARCEL\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/parcels/{{parcelId}}:updateAction",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"parcels",
+						"{{parcelId}}:updateAction"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "BookParcelForCollectionInWarehouse",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{    \r\n    \"action\":\"BOOKED_FOR_LOCAL_COLLECTION_BY_CUSTOMER\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/parcels/{{parcelId}}:updateAction",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"parcels",
+						"{{parcelId}}:updateAction"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AssignParcelToDriver",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"action\": \"SELECTED_BY_DRIVER\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/parcels/{{parcelId}}:updateAction",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"parcels",
+						"{{parcelId}}:updateAction"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DriverCollectParcel",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"action\": \"COLLECTED_BY_DRIVER\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/parcels/{{parcelId}}:updateAction",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"parcels",
+						"{{parcelId}}:updateAction"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DriverDeliversParcel",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"action\":\"DELIVERED_BY_DRIVER\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/parcels/{{parcelId}}:updateAction",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"parcels",
+						"{{parcelId}}:updateAction"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DriverReturnsParcelToWarehouse",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"action\":\"RETURNED_BY_DRIVER\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/parcels/{{parcelId}}:updateAction",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"parcels",
+						"{{parcelId}}:updateAction"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RecipientCollectParcelFromWarehouse",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"action\":\"COLLECTED_LOCALLY_BY_CUSTOMER\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/parcels/{{parcelId}}:updateAction",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"parcels",
+						"{{parcelId}}:updateAction"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RecipientRejectsParcelFromDriver",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"action\":\"REJECTED_BY_CUSTOMER\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/parcels/{{parcelId}}:updateAction",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"parcels",
+						"{{parcelId}}:updateAction"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{customerToken}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "customerToken",
+			"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZ25hY2lvdmlkYWw4OUBnbWFpbC5jb20iLCJyb2xlcyI6WyJDVVNUT01FUiJdLCJpc3MiOiIvbG9naW4iLCJleHAiOjE2NTIzNDc0MDF9.yNl594Xdi8y9XUBM8lupK-Sa45qtafd4_iBeoDyOl08"
+		},
+		{
+			"key": "parcelId",
+			"value": "a7a638df-f747-444a-a103-ee7b9d7d1708",
+			"type": "string"
+		},
+		{
+			"key": "driverToken",
+			"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZ25hY2lvdmlkYWxEcml2ZXJAZ21haWwuY29tIiwicm9sZXMiOlsiRFJJVkVSIl0sImlzcyI6Ii9sb2dpbiIsImV4cCI6MTY1MzUwMjIyMn0.xLJiXtpsOiSNP_v9pGt9KjhQhJ6EyiEzejKoHiNlZCY",
+			"type": "string"
+		}
+	]
+}

@@ -17,38 +17,6 @@ public class Parcel {
     private String owner;
     private String driver;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
-    }
-
-    public void setPickupAddress(String pickupAddress) {
-        this.pickupAddress = pickupAddress;
-    }
-
-    public void setDestinationAddress(String destinationAddress) {
-        this.destinationAddress = destinationAddress;
-    }
-
-    public void setRecipientName(String recipientName) {
-        this.recipientName = recipientName;
-    }
-
-    public void setStatus(ParcelStatus status) {
-        this.status = status;
-    }
-
-    public void setOwner(String owner) {
-        this.owner = owner;
-    }
-
-    public void setDriver(String driver) {
-        this.driver = driver;
-    }
-
     private Parcel(Long id, String uuid, String pickupAddress, String destinationAddress, ParcelStatus status, String owner, String recipientName, String driver) {
         this.id = id;
         this.uuid = uuid;
